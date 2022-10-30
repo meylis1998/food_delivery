@@ -1,25 +1,38 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:food_delivery/controllers/recommended_product_controller.dart';
 import 'package:food_delivery/utils/app_colors.dart';
+import 'package:food_delivery/utils/app_constants.dart';
 import 'package:food_delivery/utils/dimensions.dart';
 import 'package:food_delivery/widgets/app_icon.dart';
 import 'package:food_delivery/widgets/big_text.dart';
 import 'package:food_delivery/widgets/expandable_text.dart';
+import 'package:get/get.dart';
 
 class RecommendedFoodDetail extends StatelessWidget {
-  const RecommendedFoodDetail({super.key});
+  const RecommendedFoodDetail({Key? key, required this.page}) : super(key: key);
+
+  final int page;
 
   @override
   Widget build(BuildContext context) {
+    var product =
+        Get.find<RecommendedProductController>().recommendedProductList[page];
     return Scaffold(
       body: CustomScrollView(
         slivers: [
           SliverAppBar(
+            automaticallyImplyLeading: false,
             toolbarHeight: 70,
             title: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: const [
-                AppIcon(icon: Icons.clear),
-                AppIcon(icon: Icons.shopping_cart_outlined)
+              children: [
+                GestureDetector(
+                  onTap: () => Get.back(),
+                  child: const AppIcon(icon: Icons.clear),
+                ),
+                const AppIcon(icon: Icons.shopping_cart_outlined)
               ],
             ),
             bottom: PreferredSize(
@@ -35,24 +48,26 @@ class RecommendedFoodDetail extends StatelessWidget {
                     topRight: Radius.circular(Dimensions.height20),
                   ),
                 ),
-                child: BigText(text: 'Chinese Side', size: Dimensions.font26),
+                child: BigText(text: product.name!, size: Dimensions.font26),
               ),
             ),
             pinned: true,
             backgroundColor: AppColors.yellowColor,
             expandedHeight: 300,
-            flexibleSpace: const FlexibleSpaceBar(
-              background: SizedBox(width: double.maxFinite, height: 100),
+            flexibleSpace: FlexibleSpaceBar(
+              background: Image.network(
+                AppConstants.BASE_URI + AppConstants.UPLOAD_URI + product.img!,
+                fit: BoxFit.cover,
+              ),
             ),
           ),
           SliverToBoxAdapter(
             child: Container(
               margin: EdgeInsets.symmetric(horizontal: Dimensions.width20),
               child: Column(
-                children: const [
+                children: [
                   ExpandableText(
-                    text:
-                        'This Napa Cabernet is concentrated and shows a purple color with ruby hues. The nose presents shade-grown tobacco leaves and dried herbs hovering around ripe blackberries and currants over a spice-infused palate of polished tannins reminiscent of cinnamon and vanilla that extends over a persistent aftertaste.This Napa Cabernet is concentrated and shows a purple color with ruby hues. The nose presents shade-grown tobacco leaves and dried herbs hovering around ripe blackberries and currants over a spice-infused palate of polished tannins reminiscent of cinnamon and vanilla that extends over a persistent aftertaste.This Napa Cabernet is concentrated and shows a purple color with ruby hues. The nose presents shade-grown tobacco leaves and dried herbs hovering around ripe blackberries and currants over a spice-infused palate of polished tannins reminiscent of cinnamon and vanilla that extends over a persistent aftertaste.',
+                    text: product.description!,
                   ),
                 ],
               ),
@@ -78,7 +93,7 @@ class RecommendedFoodDetail extends StatelessWidget {
                   iconColor: Colors.white,
                 ),
                 BigText(
-                  text: '\$12.88 X 0',
+                  text: '\$${product.price!} X 0',
                   color: AppColors.mainBlackColor,
                   size: Dimensions.font26,
                 ),
@@ -126,7 +141,7 @@ class RecommendedFoodDetail extends StatelessWidget {
                       borderRadius: BorderRadius.circular(Dimensions.radius20),
                       color: AppColors.mainColor),
                   child: BigText(
-                    text: '\$10 | Add to cart',
+                    text: '\$${product.price!} | Add to cart',
                     color: Colors.white,
                   ),
                 ),
@@ -134,12 +149,6 @@ class RecommendedFoodDetail extends StatelessWidget {
             ),
           ),
         ],
-      ),
-      floatingActionButton: Padding(
-        padding: EdgeInsets.only(bottom: 19),
-        child: FloatingActionButton(
-          onPressed: () {},
-        ),
       ),
     );
   }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:food_delivery/controllers/popular_product_controller.dart';
 import 'package:food_delivery/controllers/recommended_product_controller.dart';
+import 'package:food_delivery/routes/route_helper.dart';
 import 'package:food_delivery/screens/home/main_food_page.dart';
 import 'package:get/get.dart';
 import 'helper/dependencies.dart' as dep;
@@ -17,10 +18,12 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     Get.find<PopularProductController>().getPopularProductList();
     Get.find<RecommendedProductController>().getRecommendedProductList();
-    return const GetMaterialApp(
-      title: 'Flutter Demo',
+    return GetMaterialApp(
       debugShowCheckedModeBanner: false,
-      home: MainFoodPage(),
+      title: 'Flutter Demo',
+      home: const MainFoodPage(),
+      initialRoute: RouteHelper.initial,
+      getPages: RouteHelper.routes,
     );
   }
 }

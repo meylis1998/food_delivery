@@ -21,7 +21,7 @@ class SmallText extends StatelessWidget {
         color: color,
         fontSize: size,
         height: height,
-        fontWeight: FontWeight.w800,
+        fontWeight: FontWeight.w500,
       ),
     );
   }
